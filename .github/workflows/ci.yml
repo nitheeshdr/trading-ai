@@ -17,8 +17,7 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9
+        # version intentionally omitted — uses packageManager field in package.json
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -45,7 +44,6 @@ jobs:
           NEXT_PUBLIC_APP_URL: http://localhost:3000
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           TRADE_MODE: paper
-          # Dummy URL so Next.js doesn't fail on missing env at build time
           AI_API_URL: http://localhost:8000
 
   # ─── Socket.IO server type-check ────────────────────────────────────────────
@@ -58,8 +56,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -88,10 +84,10 @@ jobs:
           cache: pip
           cache-dependency-path: apps/ai-backend/requirements.txt
 
-      - name: Install dependencies (no TA-Lib / torch for CI speed)
+      - name: Install dependencies (lightweight — no TA-Lib/torch for CI speed)
         working-directory: apps/ai-backend
         run: |
-          pip install fastapi pydantic pydantic-settings uvicorn httpx python-dotenv redis loguru
+          pip install fastapi pydantic pydantic-settings uvicorn httpx python-dotenv redis loguru numpy pandas scikit-learn
 
       - name: Check imports
         working-directory: apps/ai-backend
