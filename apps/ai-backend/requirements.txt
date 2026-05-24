@@ -1,0 +1,26 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+pydantic==2.9.2
+pydantic-settings==2.5.2
+httpx==0.27.2
+python-dotenv==1.0.1
+redis[hiredis]==5.0.8
+
+# ML / Data
+torch==2.4.1
+tensorflow==2.17.0
+xgboost==2.1.1
+lightgbm==4.5.0
+scikit-learn==1.5.2
+pandas==2.2.2
+numpy==1.26.4
+
+# TA-Lib (install OS lib first: brew install ta-lib)
+TA-Lib==0.4.32
+
+# NLP / FinBERT
+transformers==4.44.2
+sentencepiece==0.2.0
+
+# Logging
+loguru==0.7.2

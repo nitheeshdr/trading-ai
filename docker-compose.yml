@@ -1,0 +1,26 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: tradeview-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+
+  # Uncomment to run Supabase locally (alternative to supabase CLI)
+  # supabase-db:
+  #   image: supabase/postgres:15.1.0.117
+  #   container_name: tradeview-db
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGRES_DB: postgres
+  #   volumes:
+  #     - db_data:/var/lib/postgresql/data
+
+volumes:
+  redis_data:
+  # db_data:

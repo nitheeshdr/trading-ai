@@ -1,0 +1,39 @@
+node_modules/
+.next/
+.env
+.env.local
+.env*.local
+*.env
+dist/
+build/
+.turbo/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+*.egg-info/
+
+# Supabase
+.supabase/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# TradingView (commercial lib — not committed)
+apps/web/public/charting_library/

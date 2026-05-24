@@ -1,0 +1,15 @@
+{
+  "name": "tradeview",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "socket-server"
+  ],
+  "scripts": {
+    "dev": "pnpm --parallel --filter=!ai-backend dev",
+    "build": "pnpm --filter web build",
+    "lint": "pnpm --filter web lint"
+  }
+}
