@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { createChart, type IChartApi, type ISeriesApi, ColorType } from "lightweight-charts";
+import {
+  createChart,
+  CandlestickSeries,
+  type IChartApi,
+  type ISeriesApi,
+  ColorType,
+} from "lightweight-charts";
 import type { OHLCV } from "@/types/market";
 
 interface Props {
@@ -9,7 +15,17 @@ interface Props {
   data?: OHLCV[];
 }
 
-export function LightweightChart({ symbol, data = [] }: Props) {
+// lightweight-charts v5 expects time as UTCTimestamp (seconds since epoch)
+// Our OHLCV.time is already a Unix timestamp in seconds — cast via unknown
+type LWCCandle = {
+  time: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+};
+
+export function LightweightChart({ symbol: _symbol, data = [] }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
@@ -31,7 +47,8 @@ export function LightweightChart({ symbol, data = [] }: Props) {
       timeScale: { timeVisible: true, secondsVisible: false },
     });
 
-    const candleSeries = chart.addCandlestickSeries({
+    // v5 API: addSeries(SeriesDefinition, options)
+    const candleSeries = chart.addSeries(CandlestickSeries, {
       upColor: "#22c55e",
       downColor: "#ef4444",
       borderUpColor: "#22c55e",
@@ -44,7 +61,9 @@ export function LightweightChart({ symbol, data = [] }: Props) {
     seriesRef.current = candleSeries;
 
     const ro = new ResizeObserver(() => {
-      chart.applyOptions({ width: containerRef.current!.clientWidth });
+      if (containerRef.current) {
+        chart.applyOptions({ width: containerRef.current.clientWidth });
+      }
     });
     ro.observe(containerRef.current);
 
@@ -56,7 +75,15 @@ export function LightweightChart({ symbol, data = [] }: Props) {
 
   useEffect(() => {
     if (seriesRef.current && data.length) {
-      seriesRef.current.setData(data as Parameters<typeof seriesRef.current.setData>[0]);
+      const candles: LWCCandle[] = data.map((d) => ({
+        time: d.time,
+        open: d.open,
+        high: d.high,
+        low: d.low,
+        close: d.close,
+      }));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      seriesRef.current.setData(candles as any);
     }
   }, [data]);
 

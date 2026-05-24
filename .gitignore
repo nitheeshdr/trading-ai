@@ -37,3 +37,4 @@ pnpm-debug.log*
 
 # TradingView (commercial lib — not committed)
 apps/web/public/charting_library/
+apps/web/tsconfig.tsbuildinfo

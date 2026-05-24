@@ -18,7 +18,10 @@ export async function GET(req: NextRequest) {
     .limit(200);
 
   if (strategyId) query = query.eq("strategy_id", strategyId);
-  if (status) query = query.eq("status", status);
+  if (status) {
+    const validStatus = status as "OPEN" | "CLOSED" | "CANCELLED";
+    query = query.eq("status", validStatus);
+  }
 
   const { data, error } = await query;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

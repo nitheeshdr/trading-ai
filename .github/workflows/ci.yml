@@ -24,7 +24,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -45,6 +45,8 @@ jobs:
           NEXT_PUBLIC_APP_URL: http://localhost:3000
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           TRADE_MODE: paper
+          # Dummy URL so Next.js doesn't fail on missing env at build time
+          AI_API_URL: http://localhost:8000
 
   # ─── Socket.IO server type-check ────────────────────────────────────────────
   socket-server:
@@ -63,7 +65,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

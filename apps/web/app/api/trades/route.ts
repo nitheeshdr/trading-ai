@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
   const symbol = searchParams.get("symbol");
 
   let query = supabase.from("trades").select("*").eq("user_id", user.id).order("executed_at", { ascending: false }).limit(100);
-  if (mode) query = query.eq("mode", mode);
+  if (mode) query = query.eq("mode", mode as "real" | "paper");
   if (symbol) query = query.eq("symbol", symbol);
 
   const { data, error } = await query;

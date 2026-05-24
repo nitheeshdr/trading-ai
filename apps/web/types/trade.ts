@@ -89,4 +89,5 @@ export interface AutoTradeExecution {
   ai_signal_confidence?: number;
   entered_at: string;
   exited_at?: string;
+  metadata?: Record<string, unknown> | null;
 }

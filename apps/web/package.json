@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
-    "@supabase/ssr": "^0.6.0",
+    "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.0",
     "@tailwindcss/postcss": "^4.3.0",
     "@tailwindcss/typography": "^0.5.15",
