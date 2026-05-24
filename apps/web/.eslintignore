@@ -1,5 +1,0 @@
-.next/
-next-env.d.ts
-node_modules/
-postcss.config.mjs
-tailwind.config.ts
