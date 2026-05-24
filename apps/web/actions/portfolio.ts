@@ -30,7 +30,7 @@ export async function placePaperTrade(order: OrderRequest) {
     .eq("mode", "paper")
     .maybeSingle();
 
-  let newQty = order.type === "BUY" ? (existing?.quantity ?? 0) + order.quantity : (existing?.quantity ?? 0) - order.quantity;
+  const newQty = order.type === "BUY" ? (existing?.quantity ?? 0) + order.quantity : (existing?.quantity ?? 0) - order.quantity;
   let newAvg = existing?.avg_price ?? order.price ?? 0;
   if (order.type === "BUY" && order.price) {
     const totalCost = (existing?.quantity ?? 0) * newAvg + order.quantity * order.price;
