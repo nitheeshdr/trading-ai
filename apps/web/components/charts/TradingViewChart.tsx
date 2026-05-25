@@ -28,6 +28,7 @@ import {
 } from "lightweight-charts";
 import type { Time } from "lightweight-charts";
 import { useMarketStore } from "@/store/useMarketStore";
+import { calcEMA, calcRSI, calcMACD } from "@/lib/indicators";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -58,65 +59,6 @@ interface Props {
   exchange?: string;
   interval?: string;
   onReady?: () => void;
-}
-
-// ── Technical indicators ──────────────────────────────────────────────────────
-
-function calcEMA(data: number[], period: number): (number | null)[] {
-  const k = 2 / (period + 1);
-  const out: (number | null)[] = new Array(data.length).fill(null);
-  if (data.length < period) return out;
-  let sum = 0;
-  for (let i = 0; i < period; i++) sum += data[i];
-  out[period - 1] = sum / period;
-  for (let i = period; i < data.length; i++) {
-    out[i] = data[i] * k + (out[i - 1] as number) * (1 - k);
-  }
-  return out;
-}
-
-function calcRSI(closes: number[], period = 14): (number | null)[] {
-  const out: (number | null)[] = new Array(closes.length).fill(null);
-  if (closes.length <= period) return out;
-  let avgGain = 0, avgLoss = 0;
-  for (let i = 1; i <= period; i++) {
-    const d = closes[i] - closes[i - 1];
-    if (d > 0) avgGain += d; else avgLoss -= d;
-  }
-  avgGain /= period;
-  avgLoss /= period;
-  out[period] = avgLoss === 0 ? 100 : 100 - 100 / (1 + avgGain / avgLoss);
-  for (let i = period + 1; i < closes.length; i++) {
-    const d = closes[i] - closes[i - 1];
-    avgGain = (avgGain * (period - 1) + Math.max(d, 0)) / period;
-    avgLoss = (avgLoss * (period - 1) + Math.max(-d, 0)) / period;
-    out[i] = avgLoss === 0 ? 100 : 100 - 100 / (1 + avgGain / avgLoss);
-  }
-  return out;
-}
-
-function calcMACD(closes: number[]) {
-  const fast = calcEMA(closes, 12);
-  const slow = calcEMA(closes, 26);
-  const vals: number[] = [], idxs: number[] = [];
-  for (let i = 0; i < closes.length; i++) {
-    if (fast[i] !== null && slow[i] !== null) {
-      vals.push((fast[i] as number) - (slow[i] as number));
-      idxs.push(i);
-    }
-  }
-  const sig = calcEMA(vals, 9);
-  const macdLine: (number | null)[] = new Array(closes.length).fill(null);
-  const sigLine:  (number | null)[] = new Array(closes.length).fill(null);
-  const histLine: (number | null)[] = new Array(closes.length).fill(null);
-  idxs.forEach((origIdx, arrIdx) => {
-    macdLine[origIdx] = vals[arrIdx];
-    if (sig[arrIdx] !== null) {
-      sigLine[origIdx]  = sig[arrIdx];
-      histLine[origIdx] = vals[arrIdx] - (sig[arrIdx] as number);
-    }
-  });
-  return { macdLine, sigLine, histLine };
 }
 
 // ── Theme ─────────────────────────────────────────────────────────────────────
