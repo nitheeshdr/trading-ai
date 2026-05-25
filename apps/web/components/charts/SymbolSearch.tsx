@@ -84,7 +84,7 @@ export function SymbolSearch({ currentSymbol }: Props) {
   }
 
   return (
-    <div className="flex flex-col h-full border-r bg-card">
+    <div className="w-52 xl:w-60 shrink-0 flex flex-col h-full border-r bg-card max-md:hidden">
       {/* Search bar */}
       <div className="p-2 border-b">
         <div className="flex items-center gap-2 px-2 py-1.5 rounded-md border bg-background focus-within:ring-2 focus-within:ring-blue-500/50">
